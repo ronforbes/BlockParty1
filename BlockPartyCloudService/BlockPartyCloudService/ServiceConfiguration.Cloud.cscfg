@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="BlockPartyCloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2014-01.2.3">
+  <Role name="BlockPartyWorkerRole">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=blockparty;AccountKey=Sn4a1u8lBwAvGEoAOytJ/2P3EU6vFS64oSe7bMRqDWNpMwuxME699QprdhR9HEnlykML0u+XRIVqHzWaCmarmQ==" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

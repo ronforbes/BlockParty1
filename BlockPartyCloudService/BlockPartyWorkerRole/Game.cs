@@ -1,0 +1,109 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Timers;
+
+namespace BlockPartyWorkerRole
+{
+    public class Game
+    {
+        enum GameState
+        {
+            Pregame,
+            Gameplay,
+        }
+        GameState state = GameState.Pregame;
+        TimeSpan pregameElapsed;
+        TimeSpan pregameDuration = TimeSpan.FromSeconds(10);
+        TimeSpan roundResultsElapsed;
+        TimeSpan roundResultsDuration = TimeSpan.FromSeconds(5);
+        bool shownRoundResults;
+        TimeSpan gameplayElapsed;
+        TimeSpan gameplayDuration = TimeSpan.FromSeconds(10);
+
+        Timer updateTimer;
+        
+        const int updatesPerSecond = 1;
+
+        GameTime gameTime = new GameTime();
+
+        NetworkingManager networkingManager = new NetworkingManager();
+
+        public Dictionary<string, int> RoundResults = new Dictionary<string, int>();
+
+        public Game()
+        {
+            networkingManager.Game = this;
+
+            updateTimer = new Timer(1000.0 / updatesPerSecond);
+            updateTimer.Elapsed += Update;
+            updateTimer.Start();
+        }
+
+        async void Update(object sender, ElapsedEventArgs e)
+        {
+            gameTime.Update();
+
+            switch(state)
+            {
+                case GameState.Pregame:
+                    pregameElapsed += gameTime.Elapsed;
+                    roundResultsElapsed += gameTime.Elapsed;
+
+                    if(roundResultsElapsed >= roundResultsDuration)
+                    {
+                        if(!shownRoundResults)
+                        {
+                            List<KeyValuePair<string, int>> ranking = RoundResults.ToList();
+
+                            ranking.Sort((firstPair, nextPair) =>
+                                {
+                                    return firstPair.Value.CompareTo(nextPair.Value) * -1;
+                                });
+
+                            if(ranking.Count > 0)
+                            {
+                                Trace.TraceInformation("The winner is " + ranking[0].Key + " with a score of " + ranking[0].Value);
+                            }
+
+                            shownRoundResults = true;
+                        }
+                    }
+
+                    if(pregameElapsed >= pregameDuration)
+                    {
+                        Trace.TraceInformation("Starting gameplay");
+
+                        await networkingManager.BroadcastData("GameState Gameplay");
+
+                        state = GameState.Gameplay;
+                        gameplayElapsed = TimeSpan.Zero;
+                    }
+                    break;
+
+                case GameState.Gameplay:
+                    gameplayElapsed += gameTime.Elapsed;
+
+                    if(gameplayElapsed >= gameplayDuration)
+                    {
+                        Trace.TraceInformation("Starting pregame");
+
+                        RoundResults.Clear();
+
+                        await networkingManager.BroadcastData("GameState Pregame");
+
+                        state = GameState.Pregame;
+                        pregameElapsed = TimeSpan.Zero;
+                        roundResultsElapsed = TimeSpan.Zero;
+                        
+                        shownRoundResults = false;
+                    }
+
+                    break;
+            }
+        }
+    }
+}
