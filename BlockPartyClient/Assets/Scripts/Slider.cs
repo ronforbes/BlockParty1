@@ -18,10 +18,14 @@ public class Slider : MonoBehaviour
 	Block selectedBlock;
 	Block leftBlock;
 	Block rightBlock;
-	
+    public Round Round;
+
 	// Update is called once per frame
 	void Update () 
 	{
+        if (Round.State == Round.RoundState.Countdown)
+            return;
+
 		if(Input.GetMouseButtonDown(0))
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

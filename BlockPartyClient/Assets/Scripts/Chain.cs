@@ -13,10 +13,12 @@ public class Chain
 	public int LatestMagnitude;
 	public int X, Y;
 	public bool MatchJustOccurred;
+    SignManager signManager;
 
-	public void Initialize()
+	public void Initialize(SignManager signManager)
 	{
 		CreationTimestamp = Time.time;
+        this.signManager = signManager;
 	}
 
 	public void ReportMatch(int magnitude, Block block)
@@ -30,9 +32,16 @@ public class Chain
 		{
 			Multiplier++;
 			MultiplierCount++;
+
+            signManager.CreateSign(X, Y, Multiplier.ToString() + "x");
 		}
 
 		Magnitude += magnitude;
+
+        if(magnitude > Grid.MinimumPatternLength)
+        {
+            signManager.CreateSign(X, Y, Magnitude.ToString());
+        }
 
 		MatchJustOccurred = true;
 	}

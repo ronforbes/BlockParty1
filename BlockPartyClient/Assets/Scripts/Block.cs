@@ -131,6 +131,9 @@ public class Block : MonoBehaviour
 
 				Chain.DecrementInvolvement();
 
+                ParticleManager particleManager = FindObjectOfType<ParticleManager>();
+                particleManager.CreateParticles(X, Y, Chain.Magnitude);
+
 				blockManager.DeleteBlock(this);
 			}
 			break;

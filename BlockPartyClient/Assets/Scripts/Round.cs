@@ -8,11 +8,21 @@ public class Round : MonoBehaviour {
     public int DyingCount;
     public int Score;
 
+    public enum RoundState
+    {
+        Countdown,
+        Gameplay
+    }
+
+    public RoundState State;
+
 	// Use this for initialization
 	void Start () {
         BlockManager.StartRound();
         Grid.StartRound();
         Creep.StartRound();
+
+        State = RoundState.Countdown;
 	}
 
     public void Lose()

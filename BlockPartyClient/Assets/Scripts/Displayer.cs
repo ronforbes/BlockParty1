@@ -5,6 +5,8 @@ public class Displayer : MonoBehaviour {
 	public BlockManager BlockManager;
 	public Slider Slider;
 	public Creep Creep;
+    public SignManager SignManager;
+    public ParticleManager ParticleManager;
 
 	Color[] blockColors = new Color[Block.TypeCount];
 	Color[] creepColors = new Color[Block.TypeCount];
@@ -41,6 +43,8 @@ public class Displayer : MonoBehaviour {
 		CalculatePlayOffsetY();
 
 		DrawBlocks();
+        DrawSigns();
+        DrawParticles();
 	}
 
 	void DrawBlocks()
@@ -138,4 +142,44 @@ public class Displayer : MonoBehaviour {
 			break;
 		}
 	}
+
+    void DrawSigns()
+    {
+        foreach(Sign sign in SignManager.Signs)
+        {
+            DrawSign(sign);
+        }
+    }
+
+    void DrawSign(Sign sign)
+    {
+        float x, y;
+        float alpha;
+
+        x = sign.X * gridElementLength;
+        y = sign.Y * gridElementLength;
+        alpha = 1.0f - sign.Elapsed / Sign.Duration;
+
+        sign.transform.position = new Vector3(x, y + sign.Elapsed / Sign.Duration, 0.0f);
+        sign.transform.localScale = new Vector3(1.0f + sign.Elapsed / Sign.Duration, 1.0f + sign.Elapsed / Sign.Duration, 1.0f + sign.Elapsed / Sign.Duration);
+        TextMesh mesh = sign.transform.Find("Text").GetComponent<TextMesh>() as TextMesh;
+        mesh.color = new Color(1.0f, 1.0f, 1.0f, alpha);
+    }
+
+    void DrawParticles()
+    {
+        foreach(ParticleEffect effect in ParticleManager.ParticleEffects)
+        {
+            DrawParticleEffect(effect);
+        }
+    }
+
+    void DrawParticleEffect(ParticleEffect effect)
+    {
+        float x, y;
+        x = effect.X * gridElementLength;
+        y = effect.Y * gridElementLength;
+
+        effect.transform.position = new Vector3(x, y, -1.0f);
+    }
 }

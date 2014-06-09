@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CreepController : MonoBehaviour 
 {
+    public Round Round;
 	public bool AdvanceCommand;
 
 	float previousClickTime;
@@ -11,6 +12,9 @@ public class CreepController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+        if (Round.State == Round.RoundState.Countdown)
+            return;
+
 		if(Input.GetMouseButtonDown(0))
 		{
 			if(Time.time - previousClickTime <= doubleClickSpeed)

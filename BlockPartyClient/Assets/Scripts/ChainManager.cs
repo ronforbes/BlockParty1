@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class ChainManager : MonoBehaviour 
 {
     public Score Score;
+    public SignManager SignManager;
 
     List<Chain> chains = new List<Chain>(chainCapacity);
 
@@ -17,7 +18,7 @@ public class ChainManager : MonoBehaviour
 
         Chain chain = new Chain();
         chains.Add(chain);
-        chain.Initialize();
+        chain.Initialize(SignManager);
         
         return chain;
 	}
@@ -43,7 +44,7 @@ public class ChainManager : MonoBehaviour
                 if(chain.MatchJustOccurred)
                 {
                     // notify the score
-                    Score.RoundScore++;
+                    Score.ReportMatch(chain);
 
                     chain.MatchJustOccurred = false;
                 }

@@ -10,6 +10,11 @@ public class Score : MonoBehaviour {
 	
 	}
 	
+    public void ReportMatch(Chain chain)
+    {
+        RoundScore += chain.Magnitude * 100;
+    }
+
 	// Update is called once per frame
 	void Update () {
 	
