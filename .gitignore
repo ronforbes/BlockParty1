@@ -6,6 +6,9 @@ Temp/
 # Azure
 packages/
 
+# Xamarin Studio
+*.userprefs
+
 #################
 ## Eclipse
 #################
