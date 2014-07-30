@@ -31,6 +31,7 @@ public class CountdownManager : MonoBehaviour {
         {
             mesh.text = "GO!";
             Round.State = global::Round.RoundState.Gameplay;
+			Round.Timer.RoundTimer = 10;
         }
         else
         {

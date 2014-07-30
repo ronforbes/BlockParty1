@@ -22,7 +22,7 @@ namespace BlockPartyServer
         TimeSpan roundResultsDuration = TimeSpan.FromSeconds(5);
         bool shownRoundResults;
         TimeSpan gameplayElapsed;
-        TimeSpan gameplayDuration = TimeSpan.FromSeconds(10);
+        TimeSpan gameplayDuration = TimeSpan.FromSeconds(13);
 
         Timer updateTimer;
 

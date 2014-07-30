@@ -7,6 +7,7 @@ public class Round : MonoBehaviour {
     public Creep Creep;
     public int DyingCount;
     public Score Score;
+	public Timer Timer;
 
     public enum RoundState
     {

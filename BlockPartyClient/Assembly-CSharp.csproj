@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\SignManager.cs" />
      <Compile Include="Assets\Scripts\Slider.cs" />
      <Compile Include="Assets\Scripts\Splash.cs" />
+     <Compile Include="Assets\Scripts\Timer.cs" />
      <None Include="Assets\GoodOldSockets\license.txt" />
  <Reference Include="Assets\Plugins\GoodOldSockets">
  <HintPath>Assets\Plugins\GoodOldSockets.dll</HintPath>
