@@ -51,7 +51,7 @@ public class Game : MonoBehaviour
         {
             if(NetworkingManager.Connected)
             {
-                NetworkingManager.SendData("GameResults " + round.Score);
+                NetworkingManager.SendData("GameResults " + round.Score.RoundScore);
                 //NetworkingManager.SendRoundResults(round.Score);
             }
             

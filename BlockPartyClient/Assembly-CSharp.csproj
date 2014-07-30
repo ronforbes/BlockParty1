@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\Displayer.cs" />
      <Compile Include="Assets\Scripts\Game.cs" />
      <Compile Include="Assets\Scripts\Grid.cs" />
+     <Compile Include="Assets\Scripts\MenuGUI.cs" />
      <Compile Include="Assets\Scripts\NetworkingManager.cs" />
      <Compile Include="Assets\Scripts\ParticleEffect.cs" />
      <Compile Include="Assets\Scripts\ParticleManager.cs" />
@@ -65,6 +66,7 @@
      <Compile Include="Assets\Scripts\Sign.cs" />
      <Compile Include="Assets\Scripts\SignManager.cs" />
      <Compile Include="Assets\Scripts\Slider.cs" />
+     <Compile Include="Assets\Scripts\Splash.cs" />
      <None Include="Assets\GoodOldSockets\license.txt" />
  <Reference Include="Assets\Plugins\GoodOldSockets">
  <HintPath>Assets\Plugins\GoodOldSockets.dll</HintPath>

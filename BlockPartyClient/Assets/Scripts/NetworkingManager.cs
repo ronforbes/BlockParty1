@@ -32,10 +32,8 @@ public class NetworkingManager : MonoBehaviour
 
     public void Connect()
     {
-        // if release
-        //client = new TcpClient("23.99.20.126", 1337); // if this doesn't work, try 23.99.20.126
-        // else if debug
         client = new TcpClient("localhost", 1337);
+		//client = new TcpClient("54.183.32.220", 1337);
 
         if (client.Connected)
         {

@@ -178,8 +178,9 @@ public class Displayer : MonoBehaviour {
     {
         float x, y;
         x = effect.X * gridElementLength;
-        y = effect.Y * gridElementLength;
+        y = (effect.Y + 0.5f) * gridElementLength;
 
-        effect.transform.position = new Vector3(x, y, -1.0f);
+        effect.transform.position = new Vector3(x, y, -0.5f);
+        effect.transform.rotation = Quaternion.AngleAxis(-90.0f, new Vector3(1.0f, 0.0f, 0.0f));
     }
 }

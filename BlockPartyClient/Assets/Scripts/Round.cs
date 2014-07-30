@@ -6,7 +6,7 @@ public class Round : MonoBehaviour {
     public Grid Grid;
     public Creep Creep;
     public int DyingCount;
-    public int Score;
+    public Score Score;
 
     public enum RoundState
     {
