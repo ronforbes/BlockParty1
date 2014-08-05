@@ -1,10 +1,13 @@
 using UnityEngine;
 using System.Collections;
-//using LostPolygon.System.Net.Sockets;
+using LostPolygon.System.Net.Sockets;
 using System.IO;
 using System;
 using System.Text;
-using System.Net.Sockets;
+//using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
+using BlockPartyShared;
 
 public class NetworkingManager : MonoBehaviour 
 {
@@ -14,6 +17,8 @@ public class NetworkingManager : MonoBehaviour
     TcpClient client;
     NetworkStream stream;
     StreamWriter writer;
+	BinaryFormatter formatter;
+	
     byte[] readBuffer = new byte[1024];
 
     public bool Connected
@@ -41,13 +46,29 @@ public class NetworkingManager : MonoBehaviour
 
             stream = client.GetStream();
             writer = new StreamWriter(stream);
+			formatter = new BinaryFormatter();
 
             if (stream.CanRead)
             {
-                stream.BeginRead(readBuffer, 0, readBuffer.Length, new AsyncCallback(ReceiveData), stream);
+				Thread receiveThread = new Thread (Receive);
+				receiveThread.Start();
+				
+                //stream.BeginRead(readBuffer, 0, readBuffer.Length, new AsyncCallback(ReceiveData), stream);
             }
         }
     }
+
+	void Receive()
+	{
+		while(true) 
+		{
+			NetworkMessage message = (NetworkMessage)formatter.Deserialize(stream);
+				Debug.Log("Received data from server " + client.Client.RemoteEndPoint.ToString() + ": " + message.ToString());
+
+			// process message
+			Game.ProcessData(message);
+		}
+	}
 
     public void Disconnect()
     {
@@ -65,7 +86,7 @@ public class NetworkingManager : MonoBehaviour
         Debug.Log("Received data from server " + client.Client.RemoteEndPoint.ToString() + ": " + message);
 
         // process message
-        Game.ProcessData(message);
+        //Game.ProcessData(message);
 
         resultingStream.BeginRead(readBuffer, 0, readBuffer.Length, new AsyncCallback(ReceiveData), resultingStream);
     }

@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{196FE8C0-1A7C-CB9D-F85E-3E516B48822E}</ProjectGuid>
+	<ProjectGuid>{C99873CE-AA54-F3F8-C969-6CA3C1408619}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
@@ -46,29 +46,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Ad.cs" />
-     <Compile Include="Assets\Scripts\Block.cs" />
-     <Compile Include="Assets\Scripts\BlockManager.cs" />
-     <Compile Include="Assets\Scripts\Chain.cs" />
-     <Compile Include="Assets\Scripts\ChainManager.cs" />
-     <Compile Include="Assets\Scripts\CountdownManager.cs" />
-     <Compile Include="Assets\Scripts\Creep.cs" />
-     <Compile Include="Assets\Scripts\CreepController.cs" />
-     <Compile Include="Assets\Scripts\DebugUtilities.cs" />
-     <Compile Include="Assets\Scripts\Displayer.cs" />
-     <Compile Include="Assets\Scripts\Game.cs" />
-     <Compile Include="Assets\Scripts\Grid.cs" />
-     <Compile Include="Assets\Scripts\MenuGUI.cs" />
-     <Compile Include="Assets\Scripts\NetworkingManager.cs" />
-     <Compile Include="Assets\Scripts\ParticleEffect.cs" />
-     <Compile Include="Assets\Scripts\ParticleManager.cs" />
-     <Compile Include="Assets\Scripts\Round.cs" />
-     <Compile Include="Assets\Scripts\Score.cs" />
-     <Compile Include="Assets\Scripts\Sign.cs" />
-     <Compile Include="Assets\Scripts\SignManager.cs" />
-     <Compile Include="Assets\Scripts\Slider.cs" />
-     <Compile Include="Assets\Scripts\Splash.cs" />
-     <Compile Include="Assets\Scripts\Timer.cs" />
+     <Compile Include="Assets\Plugins\AdMobPlugin\AdMobPlugin.cs" />
+     <Compile Include="Assets\Plugins\AdMobPlugin\AdMobPluginDemoScript.cs" />
+     <Compile Include="Assets\Plugins\AdMobPlugin\AdMobPluginiOS.cs" />
      <None Include="Assets\GoodOldSockets\license.txt" />
  <Reference Include="Assets\Plugins\GoodOldSockets">
  <HintPath>Assets\Plugins\GoodOldSockets.dll</HintPath>
@@ -76,10 +56,6 @@
  <Reference Include="Assets\Plugins\BlockPartyShared">
  <HintPath>Assets\Plugins\BlockPartyShared.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{C99873CE-AA54-F3F8-C969-6CA3C1408619}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

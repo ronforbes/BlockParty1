@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 using Microsoft.Win32;
 using System;
+using BlockPartyShared;
+using System.Collections.Generic;
 
 public class Game : MonoBehaviour 
 {
@@ -12,6 +14,7 @@ public class Game : MonoBehaviour
 
     Round round;
     bool startRound, endRound;
+	List<KeyValuePair<string, int>> rankings;
 
 	// Use this for initialization
 	void Start () 
@@ -19,19 +22,29 @@ public class Game : MonoBehaviour
         
 	}
 
-    public void ProcessData(string data)
+    public void ProcessData(NetworkMessage data)
     {
-        switch(data)
+        switch(data.Type)
         {
-            case "GameState Gameplay":
-                startRound = true;
-                Debug.Log("Starting gameplay");
-                break;
-                
-            case "GameState Pregame":
-                endRound = true;
-                Debug.Log("Starting pregame");
-                break;
+				case NetworkMessage.MessageType.GameState:
+						if ((string)data.Content == "Gameplay") {
+								startRound = true;
+								Debug.Log ("Starting gameplay");
+						}
+
+						if ((string)data.Content == "Pregame") 
+						{
+								endRound = true;
+								Debug.Log("Starting pregame");
+						}
+                		break;
+
+				case NetworkMessage.MessageType.RoundResults:
+						rankings = (List<KeyValuePair<string, int>>)data.Content;
+						for (int i = 0; i < rankings.Count; i++) {
+								Debug.Log(rankings[i].Key + ": " + rankings[i].Value);
+						}
+						break;
         }
     }
 
@@ -73,7 +86,7 @@ public class Game : MonoBehaviour
         if(endRound)
         {
             EndRound();
-
+						rankings = null;
             endRound = false;
         }
 	}
@@ -105,5 +118,12 @@ public class Game : MonoBehaviour
                 NetworkingManager.Disconnect();
             }
         }
+
+				if (round == null && rankings != null) {
+						for (int i = 0; i < rankings.Count; i++) {
+								GUI.Label(new Rect(0, 100 + i * 20, 200, 20), rankings[i].Key + ": " + rankings[i].Value.ToString());
+						}
+
+				}
     }
 }

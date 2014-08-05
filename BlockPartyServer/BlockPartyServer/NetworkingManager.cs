@@ -8,6 +8,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
+using BlockPartyShared;
 
 namespace BlockPartyServer
 {
@@ -16,6 +18,7 @@ namespace BlockPartyServer
         TcpListener listener;
         List<TcpClient> clients;
         byte[] buffer;
+        BinaryFormatter formatter;
         public Game Game;
 
         public NetworkingManager()
@@ -29,6 +32,7 @@ namespace BlockPartyServer
             // Initialize the TCP client list
             clients = new List<TcpClient>();
             buffer = new byte[1024];
+            formatter = new BinaryFormatter();
 
             // Start accepting new connections from TCP clients
             listener.BeginAcceptTcpClient(new AsyncCallback(OnAcceptTcpClient), listener);
@@ -91,24 +95,26 @@ namespace BlockPartyServer
             resultingStream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), resultingClient);
         }
 
-        public void SendData(TcpClient client, string message)
+        public void SendData(TcpClient client, NetworkMessage message)
         {
             NetworkStream stream = client.GetStream();
             StreamWriter writer = new StreamWriter(stream);
 
-            writer.WriteLine(message);
-            writer.Flush();
-            Console.WriteLine("Sent data to client {0}: {1}", client.Client.RemoteEndPoint.ToString(), message);
+            formatter.Serialize(stream, message);
+
+            //writer.WriteLine(message);
+            //writer.Flush();
+            Console.WriteLine("Sent data to client {0}: {1}", client.Client.RemoteEndPoint.ToString(), message.ToString());
         }
 
-        public void BroadcastData(string message)
+        public void BroadcastData(NetworkMessage message)
         {
             foreach (TcpClient client in clients)
             {
                 SendData(client, message);
             }
 
-            Console.WriteLine("Broadcasted data to all clients: {0}", message);
+            Console.WriteLine("Broadcasted data to all clients: {0}", message.ToString());
         }
     }
 }

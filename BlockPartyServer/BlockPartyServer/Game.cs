@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using BlockPartyShared;
 
 namespace BlockPartyServer
 {
@@ -72,6 +73,10 @@ namespace BlockPartyServer
                             if(ranking.Count > 0)
                             {
                                 Console.WriteLine("The winner is " + ranking[0].Key + " with a score of " + ranking[0].Value);
+                                NetworkMessage message = new NetworkMessage();
+                                message.Type = NetworkMessage.MessageType.RoundResults;
+                                message.Content = ranking;
+                                networkingManager.BroadcastData(message);
                             }
 
                             shownRoundResults = true;
@@ -82,7 +87,10 @@ namespace BlockPartyServer
                     {
                         Console.WriteLine("Starting gameplay");
 
-                        networkingManager.BroadcastData("GameState Gameplay");
+                        NetworkMessage message = new NetworkMessage();
+                        message.Type = NetworkMessage.MessageType.GameState;
+                        message.Content = "Gameplay";
+                        networkingManager.BroadcastData(message);
 
                         state = GameState.Gameplay;
                         gameplayElapsed = TimeSpan.Zero;
@@ -98,7 +106,10 @@ namespace BlockPartyServer
 
                         RoundResults.Clear();
 
-                        networkingManager.BroadcastData("GameState Pregame");
+                        NetworkMessage message = new NetworkMessage();
+                        message.Type = NetworkMessage.MessageType.GameState;
+                        message.Content = "Pregame";
+                        networkingManager.BroadcastData(message);
 
                         state = GameState.Pregame;
                         pregameElapsed = TimeSpan.Zero;
