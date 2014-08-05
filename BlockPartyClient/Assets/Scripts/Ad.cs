@@ -3,8 +3,25 @@ using UnityEngine;
 
 // Example script showing how you can easily call into the AdMobPlugin.
 public class Ad : MonoBehaviour {
+		ADBannerView banner;
+		void Start()
+		{
+				banner = new ADBannerView (ADBannerView.Type.Banner, ADBannerView.Layout.Bottom);
+				ADBannerView.onBannerWasLoaded += OnBannerLoaded;
+				ADBannerView.onBannerWasClicked += OnBannerClicked;
+		}
 
-    void Start()
+		void OnBannerLoaded()
+		{
+				Debug.Log ("Banner loaded");
+				banner.visible = true;
+		}
+
+		void OnBannerClicked()
+		{
+				Debug.Log ("Banner clicked");
+		}
+    /*void Start()
     {
         // Pass in any extras you have as JSON.
         string extras = "{\"color_bg\":\"AAAAFF\", \"color_bg_top\":\"FFFFFF\"}";
@@ -65,5 +82,5 @@ public class Ad : MonoBehaviour {
     public void HandleLeavingApplication()
     {
         print("HandleLeavingApplication event received");
-    }
+    }*/
 }

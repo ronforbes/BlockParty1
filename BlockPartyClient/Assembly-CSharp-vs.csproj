@@ -77,10 +77,6 @@
  <HintPath>Assets\Plugins\BlockPartyShared.dll</HintPath>
  </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{C99873CE-AA54-F3F8-C969-6CA3C1408619}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	   Other similar extension points exist, see Microsoft.Common.targets.
