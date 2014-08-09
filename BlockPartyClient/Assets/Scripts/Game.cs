@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using System;
 using BlockPartyShared;
 using System.Collections.Generic;
+using Facebook.MiniJSON;
 
 public class Game : MonoBehaviour 
 {
@@ -15,12 +16,21 @@ public class Game : MonoBehaviour
     Round round;
     bool startRound, endRound;
 	List<KeyValuePair<string, int>> rankings;
+		string name;
 
 	// Use this for initialization
 	void Start () 
     {
-        
+				if (FB.IsLoggedIn) {
+						FB.API ("/me", Facebook.HttpMethod.GET, OnGetName);
+				}
 	}
+
+		void OnGetName(FBResult result)
+		{
+				var dictionary = Json.Deserialize (result.Text) as Dictionary<string, object>;
+				name = dictionary["name"] as string;
+		}
 
     public void ProcessData(NetworkMessage data)
     {
@@ -124,6 +134,10 @@ public class Game : MonoBehaviour
 								GUI.Label(new Rect(0, 100 + i * 20, 200, 20), rankings[i].Key + ": " + rankings[i].Value.ToString());
 						}
 
+				}
+
+				if (FB.IsLoggedIn) {
+						GUI.Label (new Rect (0, 200, 200, 20), name);
 				}
     }
 }
