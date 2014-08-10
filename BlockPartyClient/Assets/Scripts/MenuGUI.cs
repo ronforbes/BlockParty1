@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MenuGUI : MonoBehaviour
 {
+    public NetworkingManager NetworkingManager;
+
     // Use this for initialization
     void Start()
     {
@@ -30,7 +32,12 @@ public class MenuGUI : MonoBehaviour
             }
             else
             {
-                Application.LoadLevel("Game");
+                if (!NetworkingManager.Connected)
+                {
+                    NetworkingManager.Connect();
+                }
+
+                Application.LoadLevel("Lobby");
             }
             
         }
@@ -38,6 +45,6 @@ public class MenuGUI : MonoBehaviour
 
     void OnLogin(FBResult result)
     {
-
+        Application.LoadLevel("Lobby");
     }
 }

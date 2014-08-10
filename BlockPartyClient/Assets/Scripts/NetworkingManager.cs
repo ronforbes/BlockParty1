@@ -10,17 +10,21 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using BlockPartyShared;
 
+public class MessageReceivedEventArgs : EventArgs
+{
+    public NetworkMessage Message { get; set; }
+}
+
 public class NetworkingManager : MonoBehaviour
 {
-    public Game Game;
-    public NetworkView NetworkView;
-
     TcpClient client;
     NetworkStream stream;
     StreamWriter writer;
     BinaryFormatter formatter;
 	
     byte[] readBuffer = new byte[1024];
+
+    public event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
     public bool Connected
     {
@@ -33,7 +37,7 @@ public class NetworkingManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        
+        DontDestroyOnLoad(transform.gameObject);
     }
 
     public void Connect()
@@ -67,7 +71,18 @@ public class NetworkingManager : MonoBehaviour
             Debug.Log("Received data from server " + client.Client.RemoteEndPoint.ToString() + ": " + message.ToString());
 
             // process message
-            Game.ProcessData(message);
+            MessageReceivedEventArgs args = new MessageReceivedEventArgs();
+            args.Message = message;
+            OnMessageReceived(args);
+        }
+    }
+
+    protected virtual void OnMessageReceived(MessageReceivedEventArgs e)
+    {
+        EventHandler<MessageReceivedEventArgs> handler = MessageReceived;
+        if (handler != null)
+        {
+            handler(this, e);
         }
     }
 

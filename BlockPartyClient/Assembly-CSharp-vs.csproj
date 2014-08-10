@@ -189,6 +189,7 @@
      <Compile Include="Assets\Scripts\Displayer.cs" />
      <Compile Include="Assets\Scripts\Game.cs" />
      <Compile Include="Assets\Scripts\Grid.cs" />
+     <Compile Include="Assets\Scripts\Lobby.cs" />
      <Compile Include="Assets\Scripts\MenuGUI.cs" />
      <Compile Include="Assets\Scripts\NetworkingManager.cs" />
      <Compile Include="Assets\Scripts\ParticleEffect.cs" />
