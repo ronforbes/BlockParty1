@@ -1,25 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Creep : MonoBehaviour 
+public class Creep : MonoBehaviour
 {
-	public BlockManager BlockManager;
-	public Grid Grid;
-	public Round Round;
-	public CreepController Controller;
-	public float CreepElapsed;
+    public BlockManager BlockManager;
+    public Grid Grid;
+    public Round Round;
+    public CreepController Controller;
+    public float CreepElapsed;
 
-	public const float CreepDuration = 1.0f;
+    public const float CreepDuration = 1.0f;
 
-	bool creepFreeze;
-	float lossElapsed;
-	bool advance;
-	float creepDelayElapsed;
-	float creepDelaySpeed = 1.0f;
+    bool creepFreeze;
+    float lossElapsed;
+    bool advance;
+    float creepDelayElapsed;
+    float creepDelaySpeed = 1.0f;
 
-	const float lossDuration = 3.0f;
-	const float advanceDelaySpeed = 100.0f;
-	const float creepDelayDuration = 1.0f;
+    const float lossDuration = 3.0f;
+    const float advanceDelaySpeed = 100.0f;
+    const float creepDelayDuration = 1.0f;
 
     public void StartRound()
     {
@@ -33,91 +33,91 @@ public class Creep : MonoBehaviour
         BlockManager.CreateCreepRow();
     }
 	
-	// Update is called once per frame
-	void Update () 
-	{
+    // Update is called once per frame
+    void Update()
+    {
         if (Round.State == Round.RoundState.Countdown)
             return;
 
-		if(Round.DyingCount != 0)
-		{
-			return;
-		}
+        if (Round.DyingCount != 0)
+        {
+            return;
+        }
 
-		if(creepFreeze)
-		{
-			if(!Grid.CheckSafeHeightViolation())
-				creepFreeze = false;
-			else
-			{
-				lossElapsed += Time.deltaTime;
+        if (creepFreeze)
+        {
+            if (!Grid.CheckSafeHeightViolation())
+                creepFreeze = false;
+            else
+            {
+                lossElapsed += Time.deltaTime;
 
-				if(lossElapsed >= lossDuration)
-					Round.Lose();
+                if (lossElapsed >= lossDuration)
+                    Round.Lose();
 
-				return;
-			}
-		}
-		else
-		{
-			if(Grid.CheckSafeHeightViolation())
-			{
-				creepFreeze = true;
-				lossElapsed = 0.0f;
-			}
-		}
+                return;
+            }
+        }
+        else
+        {
+            if (Grid.CheckSafeHeightViolation())
+            {
+                creepFreeze = true;
+                lossElapsed = 0.0f;
+            }
+        }
 
-		if(advance || Controller.AdvanceCommand)
-		{
-			if(creepDelaySpeed < advanceDelaySpeed)
-			{
-				creepDelayElapsed += advanceDelaySpeed * Time.deltaTime;
-			}
-			else
-			{
-				creepDelayElapsed += creepDelaySpeed * Time.deltaTime;
-			}
+        if (advance || Controller.AdvanceCommand)
+        {
+            if (creepDelaySpeed < advanceDelaySpeed)
+            {
+                creepDelayElapsed += advanceDelaySpeed * Time.deltaTime;
+            }
+            else
+            {
+                creepDelayElapsed += creepDelaySpeed * Time.deltaTime;
+            }
 				
-			advance = true;
-		}
-		else
-		{
-			creepDelayElapsed += creepDelaySpeed * Time.deltaTime;
-		}
+            advance = true;
+        }
+        else
+        {
+            creepDelayElapsed += creepDelaySpeed * Time.deltaTime;
+        }
 
-		while(creepDelayElapsed >= creepDelayDuration)
-		{
-			creepDelayElapsed -= creepDelayDuration;
+        while (creepDelayElapsed >= creepDelayDuration)
+        {
+            creepDelayElapsed -= creepDelayDuration;
 
-			CreepElapsed += Time.deltaTime;
+            CreepElapsed += Time.deltaTime;
 
-			if(CreepElapsed >= CreepDuration)
-			{
-				CreepElapsed = 0.0f;
+            if (CreepElapsed >= CreepDuration)
+            {
+                CreepElapsed = 0.0f;
 				
-				// shift everything up one grid row
-				if(Grid.ShiftUp())
-				{
-					// create a new bottom creep row
-					BlockManager.CreateCreepRow();
+                // shift everything up one grid row
+                if (Grid.ShiftUp())
+                {
+                    // create a new bottom creep row
+                    BlockManager.CreateCreepRow();
 					
-					//link the elimination requests
-					for(int x = 0; x < Grid.PlayWidth; x++)
-					{
-						Grid.RequestMatchCheck(Grid.BlockAt(x, 1));
-					}
-				}
-				else
-				{
-					creepDelayElapsed += creepDelayDuration;
-					CreepElapsed = CreepDuration - 0.1f;
-				}
+                    //link the elimination requests
+                    for (int x = 0; x < Grid.PlayWidth; x++)
+                    {
+                        Grid.RequestMatchCheck(Grid.BlockAt(x, 1));
+                    }
+                }
+                else
+                {
+                    creepDelayElapsed += creepDelayDuration;
+                    CreepElapsed = CreepDuration - 0.1f;
+                }
 				
-				if(advance && !Controller.AdvanceCommand)
-				{
-					advance = false;
-				}
-			}
-		}
-	}
+                if (advance && !Controller.AdvanceCommand)
+                {
+                    advance = false;
+                }
+            }
+        }
+    }
 }

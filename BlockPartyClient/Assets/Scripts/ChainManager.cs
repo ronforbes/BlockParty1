@@ -2,17 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ChainManager : MonoBehaviour 
+public class ChainManager : MonoBehaviour
 {
     public Score Score;
     public SignManager SignManager;
 
     List<Chain> chains = new List<Chain>(chainCapacity);
 
-	const int chainCapacity = 8;
+    const int chainCapacity = 8;
 
-	public Chain CreateChain()
-	{
+    public Chain CreateChain()
+    {
         if (chains.Count == chains.Capacity)
             return null;
 
@@ -21,27 +21,27 @@ public class ChainManager : MonoBehaviour
         chain.Initialize(SignManager);
         
         return chain;
-	}
+    }
 
-	public void DeleteChain(Chain chain)
-	{
+    public void DeleteChain(Chain chain)
+    {
         chains.Remove(chain);
-	}
+    }
 
-	// Update is called once per frame
-	void Update() 
-	{
+    // Update is called once per frame
+    void Update()
+    {
         List<Chain> chainsToRemove = new List<Chain>();
 
-        foreach(Chain chain in chains)
+        foreach (Chain chain in chains)
         {
-            if(chain.InvolvementCount == 0)
+            if (chain.InvolvementCount == 0)
             {
                 chainsToRemove.Add(chain);
             }
             else
             {
-                if(chain.MatchJustOccurred)
+                if (chain.MatchJustOccurred)
                 {
                     // notify the score
                     Score.ReportMatch(chain);
@@ -51,9 +51,9 @@ public class ChainManager : MonoBehaviour
             }
         }
 
-        foreach(Chain chain in chainsToRemove)
+        foreach (Chain chain in chainsToRemove)
         {
             DeleteChain(chain);
         }
-	}
+    }
 }

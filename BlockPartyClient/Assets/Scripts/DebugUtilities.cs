@@ -14,10 +14,11 @@ using System.Diagnostics;
 
 public class DebugUtilities
 {
-	[Conditional("DEBUG")]
-	public static void Assert(bool condition)
-	{
-		if(!condition) throw new Exception();
-	}
+    [Conditional("DEBUG")]
+    public static void Assert(bool condition)
+    {
+        if (!condition)
+            throw new Exception();
+    }
 }
 

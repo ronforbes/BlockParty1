@@ -1,24 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Score : MonoBehaviour {
+public class Score : MonoBehaviour
+{
     public int RoundScore;
     public GUIStyle Style;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
 	
-	}
-	
+    }
+
     public void ReportMatch(Chain chain)
     {
         RoundScore += chain.Magnitude * 100;
     }
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update()
+    {
 	
-	}
+    }
 
     void OnGUI()
     {

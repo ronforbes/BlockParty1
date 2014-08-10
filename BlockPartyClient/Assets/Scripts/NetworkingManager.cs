@@ -4,12 +4,13 @@ using LostPolygon.System.Net.Sockets;
 using System.IO;
 using System;
 using System.Text;
+
 //using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using BlockPartyShared;
 
-public class NetworkingManager : MonoBehaviour 
+public class NetworkingManager : MonoBehaviour
 {
     public Game Game;
     public NetworkView NetworkView;
@@ -17,7 +18,7 @@ public class NetworkingManager : MonoBehaviour
     TcpClient client;
     NetworkStream stream;
     StreamWriter writer;
-	BinaryFormatter formatter;
+    BinaryFormatter formatter;
 	
     byte[] readBuffer = new byte[1024];
 
@@ -29,16 +30,16 @@ public class NetworkingManager : MonoBehaviour
         }
     }
 
-	// Use this for initialization
-	void Start () 
+    // Use this for initialization
+    void Start()
     {
         
-	}
+    }
 
     public void Connect()
     {
         client = new TcpClient("localhost", 1337);
-		//client = new TcpClient("54.183.32.220", 1337);
+        //client = new TcpClient("54.183.32.220", 1337);
 
         if (client.Connected)
         {
@@ -46,29 +47,29 @@ public class NetworkingManager : MonoBehaviour
 
             stream = client.GetStream();
             writer = new StreamWriter(stream);
-			formatter = new BinaryFormatter();
+            formatter = new BinaryFormatter();
 
             if (stream.CanRead)
             {
-				Thread receiveThread = new Thread (Receive);
-				receiveThread.Start();
+                Thread receiveThread = new Thread(Receive);
+                receiveThread.Start();
 				
                 //stream.BeginRead(readBuffer, 0, readBuffer.Length, new AsyncCallback(ReceiveData), stream);
             }
         }
     }
 
-	void Receive()
-	{
-		while(true) 
-		{
-			NetworkMessage message = (NetworkMessage)formatter.Deserialize(stream);
-				Debug.Log("Received data from server " + client.Client.RemoteEndPoint.ToString() + ": " + message.ToString());
+    void Receive()
+    {
+        while (true)
+        {
+            NetworkMessage message = (NetworkMessage)formatter.Deserialize(stream);
+            Debug.Log("Received data from server " + client.Client.RemoteEndPoint.ToString() + ": " + message.ToString());
 
-			// process message
-			Game.ProcessData(message);
-		}
-	}
+            // process message
+            Game.ProcessData(message);
+        }
+    }
 
     public void Disconnect()
     {
@@ -98,11 +99,11 @@ public class NetworkingManager : MonoBehaviour
         Debug.Log("Sent data to server " + client.Client.RemoteEndPoint.ToString() + ": " + message);
     }
 
-	// Update is called once per frame
-	void Update () 
+    // Update is called once per frame
+    void Update()
     {
 	
-	}
+    }
     /* Unity Networking
     public bool Connected
     {

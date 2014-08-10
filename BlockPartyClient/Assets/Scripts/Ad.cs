@@ -2,25 +2,27 @@
 using UnityEngine;
 
 // Example script showing how you can easily call into the AdMobPlugin.
-public class Ad : MonoBehaviour {
-		ADBannerView banner;
-		void Start()
-		{
-				banner = new ADBannerView (ADBannerView.Type.Banner, ADBannerView.Layout.Bottom);
-				ADBannerView.onBannerWasLoaded += OnBannerLoaded;
-				ADBannerView.onBannerWasClicked += OnBannerClicked;
-		}
+public class Ad : MonoBehaviour
+{
+    ADBannerView banner;
 
-		void OnBannerLoaded()
-		{
-				Debug.Log ("Banner loaded");
-				banner.visible = true;
-		}
+    void Start()
+    {
+        banner = new ADBannerView(ADBannerView.Type.Banner, ADBannerView.Layout.Bottom);
+        ADBannerView.onBannerWasLoaded += OnBannerLoaded;
+        ADBannerView.onBannerWasClicked += OnBannerClicked;
+    }
 
-		void OnBannerClicked()
-		{
-				Debug.Log ("Banner clicked");
-		}
+    void OnBannerLoaded()
+    {
+        Debug.Log("Banner loaded");
+        banner.visible = true;
+    }
+
+    void OnBannerClicked()
+    {
+        Debug.Log("Banner clicked");
+    }
     /*void Start()
     {
         // Pass in any extras you have as JSON.

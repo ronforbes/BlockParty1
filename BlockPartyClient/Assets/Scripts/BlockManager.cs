@@ -2,15 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class BlockManager : MonoBehaviour {
-	public Block BlockPrefab;
-	public List<Block> Blocks = new List<Block>(BlockCapacity);
+public class BlockManager : MonoBehaviour
+{
+    public Block BlockPrefab;
+    public List<Block> Blocks = new List<Block>(BlockCapacity);
     public List<int> LastRowCreepTypes = new List<int>(Grid.PlayWidth);
     public List<int> SecondToLastRowCreepTypes = new List<int>(Grid.PlayWidth);
 
-	public const int BlockCapacity = Grid.GridSize;
+    public const int BlockCapacity = Grid.GridSize;
 
-	int lastCreepType, secondToLastCreepType;
+    int lastCreepType, secondToLastCreepType;
 
     public void StartRound()
     {
@@ -28,15 +29,15 @@ public class BlockManager : MonoBehaviour {
         }
     }
 
-	public void CreateIdleBlock(int x, int y, int type)
-	{
-		if(Blocks.Count == BlockCapacity)
-			return;
+    public void CreateIdleBlock(int x, int y, int type)
+    {
+        if (Blocks.Count == BlockCapacity)
+            return;
 
         Block block = InstantiateBlock();
 
-		block.InitializeIdle(x, y, type);
-	}
+        block.InitializeIdle(x, y, type);
+    }
 
     Block InstantiateBlock()
     {
@@ -47,54 +48,54 @@ public class BlockManager : MonoBehaviour {
         return block;
     }
 
-	public void CreateCreepRow()
-	{
-		for(int x = 0; x < Grid.PlayWidth; x++)
-		{
-			CreateCreepBlock(x);
-		}
-	}
+    public void CreateCreepRow()
+    {
+        for (int x = 0; x < Grid.PlayWidth; x++)
+        {
+            CreateCreepBlock(x);
+        }
+    }
 
-	public void CreateCreepBlock(int x)
-	{
-		int type = 0;
+    public void CreateCreepBlock(int x)
+    {
+        int type = 0;
 
         if (LastRowCreepTypes.Count == 0)
             LastRowCreepTypes = new List<int>(Grid.PlayWidth);
         if (SecondToLastRowCreepTypes.Count == 0)
             SecondToLastRowCreepTypes = new List<int>(Grid.PlayWidth);
 
-		do
-		{
-			type = Random.Range(0, Block.TypeCount);
-		} while((type == lastCreepType && lastCreepType == secondToLastCreepType) ||
-			(type == LastRowCreepTypes[x] && LastRowCreepTypes[x] == SecondToLastRowCreepTypes[x]));
+        do
+        {
+            type = Random.Range(0, Block.TypeCount);
+        } while((type == lastCreepType && lastCreepType == secondToLastCreepType) ||
+          (type == LastRowCreepTypes[x] && LastRowCreepTypes[x] == SecondToLastRowCreepTypes[x]));
 
-		SecondToLastRowCreepTypes[x] = LastRowCreepTypes[x];
-		LastRowCreepTypes[x] = type;
+        SecondToLastRowCreepTypes[x] = LastRowCreepTypes[x];
+        LastRowCreepTypes[x] = type;
 
-		secondToLastCreepType = lastCreepType;
-		lastCreepType = type;
+        secondToLastCreepType = lastCreepType;
+        lastCreepType = type;
 
-		CreateIdleBlock(x, 0, type);
-	}
+        CreateIdleBlock(x, 0, type);
+    }
 
-	public void DeleteBlock(Block block)
-	{
+    public void DeleteBlock(Block block)
+    {
         Blocks.Remove(block);
         Destroy(block.gameObject);
-	}
+    }
 
-	public void ShiftUp()
-	{
-        foreach(Block block in Blocks)
+    public void ShiftUp()
+    {
+        foreach (Block block in Blocks)
         {
             block.Y++;
         }
-	}
+    }
 
-	public bool Match(Block block1, Block block2)
-	{
-		return block1.Type == block2.Type;
-	}
+    public bool Match(Block block1, Block block2)
+    {
+        return block1.Type == block2.Type;
+    }
 }
