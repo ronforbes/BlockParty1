@@ -42,8 +42,8 @@ public class NetworkingManager : MonoBehaviour
 
     public void Connect()
     {
-        client = new TcpClient("localhost", 1337);
-        //client = new TcpClient("54.183.32.220", 1337);
+        //client = new TcpClient("localhost", 1337);
+        client = new TcpClient("54.183.32.220", 1337);
 
         if (client.Connected)
         {

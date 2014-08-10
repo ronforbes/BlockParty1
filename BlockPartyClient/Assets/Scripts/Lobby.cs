@@ -13,6 +13,7 @@ public class Lobby : MonoBehaviour
     public GUIText Rank;
     public GUIText Name;
     public GUIText Score;
+    public GUIText Countdown;
 
     // Use this for initialization
     void Start()
@@ -24,6 +25,7 @@ public class Lobby : MonoBehaviour
 
         NetworkingManager networkingManager = GameObject.Find("Networking Manager").GetComponent<NetworkingManager>();
         networkingManager.MessageReceived += networkingManager_MessageReceived;
+        networkingManager.SendData("Time");
     }
 
     void OnGetName(FBResult result)

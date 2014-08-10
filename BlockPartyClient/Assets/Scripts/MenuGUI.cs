@@ -45,6 +45,11 @@ public class MenuGUI : MonoBehaviour
 
     void OnLogin(FBResult result)
     {
+        if (!NetworkingManager.Connected)
+        {
+            NetworkingManager.Connect();
+        }
+
         Application.LoadLevel("Lobby");
     }
 }
