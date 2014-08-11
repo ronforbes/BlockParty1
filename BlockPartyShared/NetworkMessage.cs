@@ -7,8 +7,9 @@ namespace BlockPartyShared
     {
         public enum MessageType
         {
-            GameState,
-            RoundResults
+            ServerGameState,
+            ServerGameResults,
+            ClientGameResults
         }
 
         public MessageType Type;
@@ -17,6 +18,18 @@ namespace BlockPartyShared
         public NetworkMessage()
         {
         }
+
+        public override string ToString()
+        {
+            return string.Format("[NetworkMessage: Type={0}, Content={1}]", Type.ToString(), Content.ToString());
+        }
+    }
+
+    public class MessageReceivedEventArgs : EventArgs
+    {
+        public NetworkMessage Message { get; set; }
+
+        public string Sender { get; set; }
     }
 }
 

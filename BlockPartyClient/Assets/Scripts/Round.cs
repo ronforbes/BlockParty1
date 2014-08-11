@@ -6,14 +6,14 @@ public class Round : MonoBehaviour
     public BlockManager BlockManager;
     public Grid Grid;
     public Creep Creep;
-    public int DyingCount;
     public Score Score;
     public Timer Timer;
 
     public enum RoundState
     {
         Countdown,
-        Gameplay
+        Gameplay,
+        Loss
     }
 
     public RoundState State;
@@ -30,7 +30,7 @@ public class Round : MonoBehaviour
 
     public void Lose()
     {
-        print("Game over");
+        State = RoundState.Loss;
     }
 
     // Update is called once per frame

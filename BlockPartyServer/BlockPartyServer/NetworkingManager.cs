@@ -17,9 +17,10 @@ namespace BlockPartyServer
     {
         TcpListener listener;
         List<TcpClient> clients;
-        byte[] buffer;
         BinaryFormatter formatter;
         public Game Game;
+
+        public event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
         public NetworkingManager()
         {
@@ -31,7 +32,6 @@ namespace BlockPartyServer
 
             // Initialize the TCP client list
             clients = new List<TcpClient>();
-            buffer = new byte[1024];
             formatter = new BinaryFormatter();
 
             // Start accepting new connections from TCP clients
@@ -48,73 +48,61 @@ namespace BlockPartyServer
             clients.Add(client);
 
             // Start receiving data from this client
-            ReceiveData(client);
+            Stream stream = client.GetStream();
+            if(stream.CanRead)
+            {
+                Thread receiveThread = new Thread(Receive);
+                receiveThread.Start(client);
+            }
 
             // Start accepting more new TCP clients
             listener.BeginAcceptTcpClient(new AsyncCallback(OnAcceptTcpClient), listener);
         }
 
-        void ReceiveData(TcpClient client)
+        void Receive(object parameter)
         {
+            TcpClient client = (TcpClient)parameter;
             NetworkStream stream = client.GetStream();
-            //StreamReader reader = new StreamReader(stream);
 
-            if (stream.CanRead)
+            while(true)
             {
-                stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), client);
+                NetworkMessage message = (NetworkMessage)formatter.Deserialize(stream);
+                Console.WriteLine("Received message from client {0}: {1}", client.Client.RemoteEndPoint.ToString(), message.ToString());
+
+                // process message
+                MessageReceivedEventArgs args = new MessageReceivedEventArgs();
+                args.Message = message;
+                args.Sender = client.Client.RemoteEndPoint.ToString();
+                OnMessageReceived(args);
             }
         }
 
-        void OnRead(IAsyncResult result)
+        protected virtual void OnMessageReceived(MessageReceivedEventArgs e)
         {
-            TcpClient resultingClient = (TcpClient)result.AsyncState;
-            NetworkStream resultingStream = resultingClient.GetStream();
-
-            int bytesRead = resultingStream.EndRead(result);
-
-            // If no bytes can be read, then the client disconnected (TODO: test this)
-            if (bytesRead == 0)
+            EventHandler<MessageReceivedEventArgs> handler = MessageReceived;
+            if(handler != null)
             {
-                clients.Remove(resultingClient);
-
-                Console.WriteLine("Disconnected from client {0}", resultingClient.Client.RemoteEndPoint.ToString());
-
-                return;
+                handler(this, e);
             }
-
-            string message = Encoding.ASCII.GetString(buffer, 0, bytesRead).Trim();
-            Console.WriteLine("Received data from client {0}: {1}", resultingClient.Client.RemoteEndPoint.ToString(), message);
-
-            // Process data (TODO: Refactor this into a Game.Process method
-            string[] words = message.Split(' ');
-            if(words[0] == "GameResults")
-            {
-                Game.RoundResults.Add(resultingClient.Client.RemoteEndPoint.ToString(), int.Parse(words[1]));
-            }
-
-            resultingStream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), resultingClient);
         }
 
-        public void SendData(TcpClient client, NetworkMessage message)
+        public void Send(TcpClient client, NetworkMessage message)
         {
             NetworkStream stream = client.GetStream();
-            StreamWriter writer = new StreamWriter(stream);
 
             formatter.Serialize(stream, message);
 
-            //writer.WriteLine(message);
-            //writer.Flush();
-            Console.WriteLine("Sent data to client {0}: {1}", client.Client.RemoteEndPoint.ToString(), message.ToString());
+            Console.WriteLine("Sent message to client {0}: {1}", client.Client.RemoteEndPoint.ToString(), message.ToString());
         }
 
-        public void BroadcastData(NetworkMessage message)
+        public void Broadcast(NetworkMessage message)
         {
-            foreach (TcpClient client in clients)
+            foreach(TcpClient client in clients)
             {
-                SendData(client, message);
+                Send(client, message);
             }
 
-            Console.WriteLine("Broadcasted data to all clients: {0}", message.ToString());
+            Console.WriteLine("Broadcasted message to all clients: {0}", message.ToString());
         }
     }
 }

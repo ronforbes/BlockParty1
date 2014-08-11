@@ -12,7 +12,7 @@ public class CreepController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Round.State == Round.RoundState.Countdown)
+        if (Round.State == Round.RoundState.Countdown || Round.State == Round.RoundState.Loss)
             return;
 
         if (Input.GetMouseButtonDown(0))

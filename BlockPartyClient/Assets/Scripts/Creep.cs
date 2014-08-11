@@ -36,10 +36,10 @@ public class Creep : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Round.State == Round.RoundState.Countdown)
+        if (Round.State == Round.RoundState.Countdown || Round.State == Round.RoundState.Loss)
             return;
 
-        if (Round.DyingCount != 0)
+        if (BlockManager.DyingBlockCount != 0)
         {
             return;
         }

@@ -8,8 +8,8 @@ public class BlockManager : MonoBehaviour
     public List<Block> Blocks = new List<Block>(BlockCapacity);
     public List<int> LastRowCreepTypes = new List<int>(Grid.PlayWidth);
     public List<int> SecondToLastRowCreepTypes = new List<int>(Grid.PlayWidth);
-
     public const int BlockCapacity = Grid.GridSize;
+    public int DyingBlockCount = 0;
 
     int lastCreepType, secondToLastCreepType;
 
@@ -69,7 +69,7 @@ public class BlockManager : MonoBehaviour
         {
             type = Random.Range(0, Block.TypeCount);
         } while((type == lastCreepType && lastCreepType == secondToLastCreepType) ||
-          (type == LastRowCreepTypes[x] && LastRowCreepTypes[x] == SecondToLastRowCreepTypes[x]));
+                (type == LastRowCreepTypes[x] && LastRowCreepTypes[x] == SecondToLastRowCreepTypes[x]));
 
         SecondToLastRowCreepTypes[x] = LastRowCreepTypes[x];
         LastRowCreepTypes[x] = type;

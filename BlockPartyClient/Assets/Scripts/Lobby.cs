@@ -25,7 +25,6 @@ public class Lobby : MonoBehaviour
 
         NetworkingManager networkingManager = GameObject.Find("Networking Manager").GetComponent<NetworkingManager>();
         networkingManager.MessageReceived += networkingManager_MessageReceived;
-        networkingManager.SendData("Time");
     }
 
     void OnGetName(FBResult result)
@@ -38,15 +37,15 @@ public class Lobby : MonoBehaviour
     {
         switch (e.Message.Type)
         {
-            case NetworkMessage.MessageType.GameState:
-                if ((string)e.Message.Content == "Gameplay")
+            case NetworkMessage.MessageType.ServerGameState:
+                if ((string)e.Message.Content == "Game")
                 {
                     Debug.Log("Starting gameplay");
                     startGame = true;
                 }
                 break;
 
-            case NetworkMessage.MessageType.RoundResults:
+            case NetworkMessage.MessageType.ServerGameResults:
                 rankings = (List<KeyValuePair<string, int>>)e.Message.Content;
 
                 updateRanking = true;

@@ -14,15 +14,22 @@ public class Game : MonoBehaviour
     public Round RoundPrefab;
 
     Round round;
-    bool startRound, endRound;
-
-    string name;
+    bool hasEnded;
 
     // Use this for initialization
     void Start()
     {
-        networkingManager = GameObject.Find("Networking Manager").GetComponent<NetworkingManager>();
-        networkingManager.MessageReceived += networkingManager_MessageReceived;
+        GameObject networkingManagerObject = GameObject.Find("Networking Manager");
+
+        if (networkingManagerObject == null)
+        {
+            Debug.LogWarning("Couldn't find the Networking Manager. Proceeding without networking...");
+        }
+        else
+        {
+            networkingManager = networkingManagerObject.GetComponent<NetworkingManager>();
+            networkingManager.MessageReceived += networkingManager_MessageReceived;
+        }
 
         round = Instantiate(RoundPrefab) as Round;
     }
@@ -31,37 +38,38 @@ public class Game : MonoBehaviour
     {
         switch (e.Message.Type)
         {
-            case NetworkMessage.MessageType.GameState:
-                if ((string)e.Message.Content == "Pregame")
+            case NetworkMessage.MessageType.ServerGameState:
+                if ((string)e.Message.Content == "Lobby")
                 {
-                    endRound = true;
-                    Debug.Log("Starting pregame");
+                    hasEnded = true;
                 }
                 break;
-        }
-    }
-
-    public void EndRound()
-    {
-        if (round != null)
-        {
-            if (networkingManager.Connected)
-            {
-                networkingManager.SendData("GameResults " + round.Score.RoundScore);
-                //NetworkingManager.SendRoundResults(round.Score);
-            }
-            
-            Application.LoadLevel("Lobby");
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (endRound)
+        if (hasEnded)
         {
-            EndRound();
-            endRound = false;
+            End();
+            hasEnded = false;
         }
+    }
+
+    void End()
+    {
+        if (networkingManager != null)
+        {
+            if (networkingManager.Connected)
+            {
+                NetworkMessage message = new NetworkMessage();
+                message.Type = NetworkMessage.MessageType.ClientGameResults;
+                message.Content = round.Score.RoundScore;
+                networkingManager.Send(message);
+            }
+        }
+            
+        Application.LoadLevel("Lobby");
     }
 }

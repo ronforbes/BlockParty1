@@ -36,14 +36,11 @@ public class Block : MonoBehaviour
 
     Grid grid;
 
-    Round round;
-
     // Use this for initialization
     void Start()
     {
         blockManager = GameObject.Find("Block Manager").GetComponent<BlockManager>();
         grid = GameObject.Find("Grid").GetComponent<Grid>();
-        round = GameObject.Find("Round(Clone)").GetComponent<Round>();
     }
 
     public void InitializeIdle(int x, int y, int type)
@@ -118,7 +115,7 @@ public class Block : MonoBehaviour
                 if (DieElapsed >= DieDuration)
                 {
                     // change the game state
-                    round.DyingCount--;
+                    blockManager.DyingBlockCount--;
 
                     // update the grid
                     grid.Remove(X, Y, this);
@@ -191,7 +188,7 @@ public class Block : MonoBehaviour
     public void StartDying(Chain chain, int sparkNumber)
     {
         // change the game state
-        round.DyingCount++;
+        blockManager.DyingBlockCount++;
 
         BeginChainInvolvement(chain);
 

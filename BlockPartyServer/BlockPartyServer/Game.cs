@@ -13,17 +13,18 @@ namespace BlockPartyServer
     {
         enum GameState
         {
-            Pregame,
-            Gameplay,
+            Lobby,
+            Game,
         }
-        GameState state = GameState.Pregame;
-        TimeSpan pregameElapsed;
-        TimeSpan pregameDuration = TimeSpan.FromSeconds(10);
-        TimeSpan roundResultsElapsed;
-        TimeSpan roundResultsDuration = TimeSpan.FromSeconds(5);
-        bool shownRoundResults;
-        TimeSpan gameplayElapsed;
-        TimeSpan gameplayDuration = TimeSpan.FromSeconds(13);
+
+        GameState state = GameState.Lobby;
+        TimeSpan lobbyElapsed;
+        TimeSpan lobbyDuration = TimeSpan.FromSeconds(10);
+        TimeSpan gameResultsElapsed;
+        TimeSpan gameResultsDuration = TimeSpan.FromSeconds(5);
+        bool shownGameResults;
+        TimeSpan gameElapsed;
+        TimeSpan gameDuration = TimeSpan.FromSeconds(13);
 
         Timer updateTimer;
 
@@ -33,19 +34,29 @@ namespace BlockPartyServer
 
         NetworkingManager networkingManager = new NetworkingManager();
 
-        public Dictionary<string, int> RoundResults = new Dictionary<string, int>();
+        public Dictionary<string, int> GameResults = new Dictionary<string, int>();
 
         public Game()
         {
             networkingManager.Game = this;
-
+            networkingManager.MessageReceived += networkingManager_MessageReceived;
             updateTimer = new Timer(1000.0 / updatesPerSecond);
             updateTimer.Elapsed += Update;
             updateTimer.Start();
 
-            while (true)
+            while(true)
             {
 
+            }
+        }
+
+        void networkingManager_MessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            switch(e.Message.Type)
+            {
+                case NetworkMessage.MessageType.ClientGameResults:
+                    GameResults.Add(e.Sender, (int)e.Message.Content);
+                    break;
             }
         }
 
@@ -55,15 +66,15 @@ namespace BlockPartyServer
 
             switch(state)
             {
-                case GameState.Pregame:
-                    pregameElapsed += gameTime.Elapsed;
-                    roundResultsElapsed += gameTime.Elapsed;
+                case GameState.Lobby:
+                    lobbyElapsed += gameTime.Elapsed;
+                    gameResultsElapsed += gameTime.Elapsed;
 
-                    if(roundResultsElapsed >= roundResultsDuration)
+                    if(gameResultsElapsed >= gameResultsDuration)
                     {
-                        if(!shownRoundResults)
+                        if(!shownGameResults)
                         {
-                            List<KeyValuePair<string, int>> ranking = RoundResults.ToList();
+                            List<KeyValuePair<string, int>> ranking = GameResults.ToList();
 
                             ranking.Sort((firstPair, nextPair) =>
                                 {
@@ -74,48 +85,48 @@ namespace BlockPartyServer
                             {
                                 Console.WriteLine("The winner is " + ranking[0].Key + " with a score of " + ranking[0].Value);
                                 NetworkMessage message = new NetworkMessage();
-                                message.Type = NetworkMessage.MessageType.RoundResults;
+                                message.Type = NetworkMessage.MessageType.ServerGameResults;
                                 message.Content = ranking;
-                                networkingManager.BroadcastData(message);
+                                networkingManager.Broadcast(message);
                             }
 
-                            shownRoundResults = true;
+                            shownGameResults = true;
                         }
                     }
 
-                    if(pregameElapsed >= pregameDuration)
+                    if(lobbyElapsed >= lobbyDuration)
                     {
-                        Console.WriteLine("Starting gameplay");
+                        Console.WriteLine("Starting game");
 
                         NetworkMessage message = new NetworkMessage();
-                        message.Type = NetworkMessage.MessageType.GameState;
-                        message.Content = "Gameplay";
-                        networkingManager.BroadcastData(message);
+                        message.Type = NetworkMessage.MessageType.ServerGameState;
+                        message.Content = "Game";
+                        networkingManager.Broadcast(message);
 
-                        state = GameState.Gameplay;
-                        gameplayElapsed = TimeSpan.Zero;
+                        state = GameState.Game;
+                        gameElapsed = TimeSpan.Zero;
                     }
                     break;
 
-                case GameState.Gameplay:
-                    gameplayElapsed += gameTime.Elapsed;
+                case GameState.Game:
+                    gameElapsed += gameTime.Elapsed;
 
-                    if(gameplayElapsed >= gameplayDuration)
+                    if(gameElapsed >= gameDuration)
                     {
-                        Console.WriteLine("Starting pregame");
+                        Console.WriteLine("Starting lobby");
 
-                        RoundResults.Clear();
+                        GameResults.Clear();
 
                         NetworkMessage message = new NetworkMessage();
-                        message.Type = NetworkMessage.MessageType.GameState;
-                        message.Content = "Pregame";
-                        networkingManager.BroadcastData(message);
+                        message.Type = NetworkMessage.MessageType.ServerGameState;
+                        message.Content = "Lobby";
+                        networkingManager.Broadcast(message);
 
-                        state = GameState.Pregame;
-                        pregameElapsed = TimeSpan.Zero;
-                        roundResultsElapsed = TimeSpan.Zero;
+                        state = GameState.Lobby;
+                        lobbyElapsed = TimeSpan.Zero;
+                        gameResultsElapsed = TimeSpan.Zero;
 
-                        shownRoundResults = false;
+                        shownGameResults = false;
                     }
 
                     break;

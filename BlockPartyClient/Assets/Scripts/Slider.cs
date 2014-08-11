@@ -23,7 +23,7 @@ public class Slider : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Round.State == Round.RoundState.Countdown)
+        if (Round.State == Round.RoundState.Countdown || Round.State == Round.RoundState.Loss)
             return;
 
         if (Input.GetMouseButtonDown(0))
@@ -36,7 +36,7 @@ public class Slider : MonoBehaviour
                 {
                     Block block = hit.collider.gameObject.transform.parent.gameObject.GetComponent<Block>();
                     if (Grid.StateAt(block.X, block.Y) == GridElement.ElementState.Block &&
-                    block.Y > 0)
+                        block.Y > 0)
                     {
                         selectedBlock = block;
                     }
@@ -67,7 +67,7 @@ public class Slider : MonoBehaviour
                     else
                     {
                         if (Grid.StateAt(selectedBlock.X, selectedBlock.Y) != GridElement.ElementState.Empty ||
-                        Grid.StateAt(selectedBlock.X, selectedBlock.Y - 1) == GridElement.ElementState.Falling)
+                            Grid.StateAt(selectedBlock.X, selectedBlock.Y - 1) == GridElement.ElementState.Falling)
                         {
                             // TODO: Once you implement hanging state, check for that too
                             slideDisallowed = true;
@@ -84,7 +84,7 @@ public class Slider : MonoBehaviour
                     else
                     {
                         if (Grid.StateAt(selectedBlock.X - 1, selectedBlock.Y) != GridElement.ElementState.Empty ||
-                        Grid.StateAt(selectedBlock.X - 1, selectedBlock.Y - 1) == GridElement.ElementState.Falling)
+                            Grid.StateAt(selectedBlock.X - 1, selectedBlock.Y - 1) == GridElement.ElementState.Falling)
                         {
                             // TODO: Once you implement hanging state, check for that too
                             slideDisallowed = true;
@@ -107,7 +107,7 @@ public class Slider : MonoBehaviour
                     else
                     {
                         if (Grid.StateAt(selectedBlock.X, selectedBlock.Y) != GridElement.ElementState.Empty ||
-                        Grid.StateAt(selectedBlock.X, selectedBlock.Y - 1) == GridElement.ElementState.Falling)
+                            Grid.StateAt(selectedBlock.X, selectedBlock.Y - 1) == GridElement.ElementState.Falling)
                         {
                             // TODO: Once you implement hanging state, check for that too
                             slideDisallowed = true;
@@ -124,7 +124,7 @@ public class Slider : MonoBehaviour
                     else
                     {
                         if (Grid.StateAt(selectedBlock.X + 1, selectedBlock.Y) != GridElement.ElementState.Empty ||
-                        Grid.StateAt(selectedBlock.X + 1, selectedBlock.Y - 1) == GridElement.ElementState.Falling)
+                            Grid.StateAt(selectedBlock.X + 1, selectedBlock.Y - 1) == GridElement.ElementState.Falling)
                         {
                             // TODO: Once you implement hanging state, check for that too
                             slideDisallowed = true;
