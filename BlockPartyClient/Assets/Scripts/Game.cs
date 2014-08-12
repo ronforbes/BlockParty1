@@ -12,7 +12,6 @@ public class Game : MonoBehaviour
 {
     NetworkingManager networkingManager;
     public Round RoundPrefab;
-
     Round round;
     bool hasEnded;
 
@@ -61,6 +60,8 @@ public class Game : MonoBehaviour
     {
         if (networkingManager != null)
         {
+            networkingManager.MessageReceived -= networkingManager_MessageReceived;
+
             if (networkingManager.Connected)
             {
                 NetworkMessage message = new NetworkMessage();

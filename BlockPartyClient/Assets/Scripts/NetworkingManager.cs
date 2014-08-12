@@ -13,10 +13,7 @@ public class NetworkingManager : MonoBehaviour
 {
     TcpClient client;
     NetworkStream stream;
-    StreamWriter writer;
     BinaryFormatter formatter;
-	
-    byte[] readBuffer = new byte[1024];
 
     public event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
@@ -47,7 +44,6 @@ public class NetworkingManager : MonoBehaviour
             Debug.Log("Connected to server " + client.Client.RemoteEndPoint.ToString());
 
             stream = client.GetStream();
-            writer = new StreamWriter(stream);
             formatter = new BinaryFormatter();
 
             if (stream.CanRead)
@@ -93,9 +89,18 @@ public class NetworkingManager : MonoBehaviour
         Debug.Log("Disconnected from server");
     }
 
-    // Update is called once per frame
     void Update()
     {
 	
+    }
+
+    void Destroy()
+    {
+        Disconnect();
+    }
+
+    void OnApplicationQuit()
+    {
+        Disconnect();
     }
 }

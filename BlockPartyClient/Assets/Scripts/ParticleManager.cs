@@ -8,7 +8,6 @@ public class ParticleManager : MonoBehaviour
     public ParticleEffect ParticleEffectPrefab;
     List<Color> particleColors = new List<Color>(Block.TypeCount);
 
-    // Use this for initialization
     void Start()
     {
         particleColors.Add(new Color(0.73f, 0.0f, 0.73f));
@@ -30,7 +29,6 @@ public class ParticleManager : MonoBehaviour
         effect.GetComponent<ParticleSystem>().Emit(count);
     }
 
-    // Update is called once per frame
     void Update()
     {
         List<ParticleEffect> effectsToRemove = new List<ParticleEffect>();

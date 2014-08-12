@@ -8,15 +8,12 @@ public class Creep : MonoBehaviour
     public Round Round;
     public CreepController Controller;
     public float CreepElapsed;
-
     public const float CreepDuration = 1.0f;
-
     bool creepFreeze;
     float lossElapsed;
     bool advance;
     float creepDelayElapsed;
     float creepDelaySpeed = 1.0f;
-
     const float lossDuration = 3.0f;
     const float advanceDelaySpeed = 100.0f;
     const float creepDelayDuration = 1.0f;
@@ -32,8 +29,7 @@ public class Creep : MonoBehaviour
 
         BlockManager.CreateCreepRow();
     }
-	
-    // Update is called once per frame
+
     void Update()
     {
         if (Round.State == Round.RoundState.Countdown || Round.State == Round.RoundState.Loss)

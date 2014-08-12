@@ -6,13 +6,11 @@ public class CountdownManager : MonoBehaviour
     float elapsed;
     public Round Round;
 
-    // Use this for initialization
     void Start()
     {
 	
     }
-	
-    // Update is called once per frame
+
     void Update()
     {
         elapsed += Time.deltaTime;

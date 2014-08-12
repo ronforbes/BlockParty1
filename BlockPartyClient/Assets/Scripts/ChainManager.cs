@@ -6,9 +6,7 @@ public class ChainManager : MonoBehaviour
 {
     public Score Score;
     public SignManager SignManager;
-
     List<Chain> chains = new List<Chain>(chainCapacity);
-
     const int chainCapacity = 8;
 
     public Chain CreateChain()
@@ -28,7 +26,6 @@ public class ChainManager : MonoBehaviour
         chains.Remove(chain);
     }
 
-    // Update is called once per frame
     void Update()
     {
         List<Chain> chainsToRemove = new List<Chain>();

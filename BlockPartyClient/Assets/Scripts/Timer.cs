@@ -5,17 +5,14 @@ public class Timer : MonoBehaviour
 {
     public int RoundTimer;
     public GUIStyle Style;
-	
     float elapsed;
     const float duration = 1.0f;
 
-    // Use this for initialization
     void Start()
     {
 	
     }
-	
-    // Update is called once per frame
+
     void Update()
     {
         elapsed += Time.deltaTime;

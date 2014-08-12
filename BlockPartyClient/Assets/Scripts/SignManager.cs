@@ -7,7 +7,6 @@ public class SignManager : MonoBehaviour
     public List<Sign> Signs;
     public Sign SignPrefab;
 
-    // Use this for initialization
     void Start()
     {
         Signs = new List<Sign>();
@@ -21,7 +20,6 @@ public class SignManager : MonoBehaviour
         Signs.Add(sign);
     }
 
-    // Update is called once per frame
     void Update()
     {
         List<Sign> signsToRemove = new List<Sign>();

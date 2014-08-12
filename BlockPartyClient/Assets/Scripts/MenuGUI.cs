@@ -5,7 +5,6 @@ public class MenuGUI : MonoBehaviour
 {
     public NetworkingManager NetworkingManager;
 
-    // Use this for initialization
     void Start()
     {
         FB.Init(OnInit);
@@ -15,8 +14,7 @@ public class MenuGUI : MonoBehaviour
     {
 
     }
-	
-    // Update is called once per frame
+
     void Update()
     {
 	

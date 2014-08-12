@@ -18,7 +18,6 @@ public class Round : MonoBehaviour
 
     public RoundState State;
 
-    // Use this for initialization
     void Start()
     {
         BlockManager.StartRound();
@@ -33,7 +32,6 @@ public class Round : MonoBehaviour
         State = RoundState.Loss;
     }
 
-    // Update is called once per frame
     void Update()
     {
 	

@@ -8,7 +8,6 @@ public class Sign : MonoBehaviour
     public const float Duration = 3.0f;
     public bool Active;
 
-    // Use this for initialization
     void Start()
     {
 	
@@ -23,7 +22,6 @@ public class Sign : MonoBehaviour
         Active = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         Elapsed += Time.deltaTime;

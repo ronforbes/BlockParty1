@@ -7,6 +7,7 @@ using System;
 
 public class Lobby : MonoBehaviour
 {
+    NetworkingManager networkingManager;
     List<KeyValuePair<string, int>> rankings;
     bool startGame = false;
     bool updateRanking = false;
@@ -15,7 +16,6 @@ public class Lobby : MonoBehaviour
     public GUIText Score;
     public GUIText Countdown;
 
-    // Use this for initialization
     void Start()
     {
         if (FB.IsLoggedIn)
@@ -23,7 +23,7 @@ public class Lobby : MonoBehaviour
             FB.API("/me", Facebook.HttpMethod.GET, OnGetName);
         }
 
-        NetworkingManager networkingManager = GameObject.Find("Networking Manager").GetComponent<NetworkingManager>();
+        networkingManager = GameObject.Find("Networking Manager").GetComponent<NetworkingManager>();
         networkingManager.MessageReceived += networkingManager_MessageReceived;
     }
 
@@ -40,7 +40,6 @@ public class Lobby : MonoBehaviour
             case NetworkMessage.MessageType.ServerGameState:
                 if ((string)e.Message.Content == "Game")
                 {
-                    Debug.Log("Starting gameplay");
                     startGame = true;
                 }
                 break;
@@ -53,11 +52,15 @@ public class Lobby : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (startGame)
         {
+            if (networkingManager != null)
+            {
+                networkingManager.MessageReceived -= networkingManager_MessageReceived;
+            }
+
             Application.LoadLevel("Game");
         }
 

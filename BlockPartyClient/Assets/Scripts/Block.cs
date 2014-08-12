@@ -3,11 +3,6 @@ using System.Collections;
 
 public class Block : MonoBehaviour
 {
-    public int Type;
-    public const int TypeCount = 5;
-
-    public int X, Y;
-
     public enum BlockState
     {
         Idle,
@@ -16,27 +11,22 @@ public class Block : MonoBehaviour
         Dying,
     }
 
+    public int Type;
+    public const int TypeCount = 5;
+    public int X, Y;
     public BlockState State;
     bool changeState;
-    // Used to signal transitioning to a new state on the next frame (TODO: This is a complete hack! Investigate why Unity crashes when I change state from static to falling)
-
     public Chain Chain;
-
     public Slider.SlideDirection Direction;
     public bool SlideFront;
-
     public float FallElapsed;
     public const float FallDuration = 0.1f;
-
     public float DieElapsed;
     public const float DieDuration = 1.5f;
     public Vector2 DyingAxis;
-
     BlockManager blockManager;
-
     Grid grid;
 
-    // Use this for initialization
     void Start()
     {
         blockManager = GameObject.Find("Block Manager").GetComponent<BlockManager>();
@@ -58,7 +48,6 @@ public class Block : MonoBehaviour
         transform.position = new Vector3(X, Y, 0.0f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         // don't update the creep row
@@ -125,7 +114,6 @@ public class Block : MonoBehaviour
                     {
                         if (grid.StateAt(X, Y + 1) == GridElement.ElementState.Block)
                             grid.BlockAt(X, Y + 1).StartFalling(Chain);
-                        // TODO: do the same for garbage
                     }
 
                     Chain.DecrementInvolvement();

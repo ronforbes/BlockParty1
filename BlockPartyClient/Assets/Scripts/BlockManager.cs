@@ -10,7 +10,6 @@ public class BlockManager : MonoBehaviour
     public List<int> SecondToLastRowCreepTypes = new List<int>(Grid.PlayWidth);
     public const int BlockCapacity = Grid.GridSize;
     public int DyingBlockCount = 0;
-
     int lastCreepType, secondToLastCreepType;
 
     public void StartRound()

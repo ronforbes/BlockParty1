@@ -6,7 +6,6 @@ public class Score : MonoBehaviour
     public int RoundScore;
     public GUIStyle Style;
 
-    // Use this for initialization
     void Start()
     {
 	
@@ -17,7 +16,6 @@ public class Score : MonoBehaviour
         RoundScore += chain.Magnitude * 100;
     }
 
-    // Update is called once per frame
     void Update()
     {
 	

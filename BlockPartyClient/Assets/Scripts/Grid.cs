@@ -39,19 +39,16 @@ public class Grid : MonoBehaviour
 {
     public BlockManager BlockManager;
     public ChainManager ChainManager;
-
     public const int PlayWidth = 6;
     public const int PlayHeight = 45;
     public const int SafeHeight = 13;
     public const int GridSize = PlayWidth * PlayHeight;
     public const int MinimumPatternLength = 3;
-
     GridElement[,] grid;
     List<MatchCheck> matchChecks;
     int topOccupiedRow;
     int topEffectiveRow;
 
-    // Use this for initialization
     void Start()
     {
         
@@ -176,7 +173,6 @@ public class Grid : MonoBehaviour
         return topEffectiveRow >= SafeHeight - 1;
     }
 
-    // Update is called once per frame
     void Update()
     {
         // process elimination check requests

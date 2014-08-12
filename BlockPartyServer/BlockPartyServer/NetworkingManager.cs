@@ -44,7 +44,7 @@ namespace BlockPartyServer
 
             TcpClient client = resultingListener.EndAcceptTcpClient(result);
 
-            Console.WriteLine("Accepted new client {0}", client.Client.RemoteEndPoint.ToString());
+            Console.WriteLine("Accepted new client at {0}", client.Client.RemoteEndPoint.ToString());
             clients.Add(client);
 
             // Start receiving data from this client
@@ -66,14 +66,24 @@ namespace BlockPartyServer
 
             while(true)
             {
-                NetworkMessage message = (NetworkMessage)formatter.Deserialize(stream);
-                Console.WriteLine("Received message from client {0}: {1}", client.Client.RemoteEndPoint.ToString(), message.ToString());
+                try
+                {
+                    NetworkMessage message = (NetworkMessage)formatter.Deserialize(stream);
+                    Console.WriteLine("Received message from client {0}: {1}", client.Client.RemoteEndPoint.ToString(), message.ToString());
 
-                // process message
-                MessageReceivedEventArgs args = new MessageReceivedEventArgs();
-                args.Message = message;
-                args.Sender = client.Client.RemoteEndPoint.ToString();
-                OnMessageReceived(args);
+                    // process message
+                    MessageReceivedEventArgs args = new MessageReceivedEventArgs();
+                    args.Message = message;
+                    args.Sender = client.Client.RemoteEndPoint.ToString();
+                    OnMessageReceived(args);
+                }
+                catch(IOException e)
+                {
+                    Console.WriteLine("Client disconnected from {0}", client.Client.RemoteEndPoint.ToString());
+                    clients.Remove(client);
+                    client.Close();
+                    return;
+                }
             }
         }
 

@@ -13,14 +13,12 @@ public class Slider : MonoBehaviour
     public float SlideElapsed;
     public float SlideDuration = 0.1f;
     public Grid Grid;
-	
     bool sliding;
     Block selectedBlock;
     Block leftBlock;
     Block rightBlock;
     public Round Round;
 
-    // Update is called once per frame
     void Update()
     {
         if (Round.State == Round.RoundState.Countdown || Round.State == Round.RoundState.Loss)

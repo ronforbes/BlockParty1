@@ -8,18 +8,14 @@ public class Displayer : MonoBehaviour
     public Creep Creep;
     public SignManager SignManager;
     public ParticleManager ParticleManager;
-
     Color[] blockColors = new Color[Block.TypeCount];
     Color[] creepColors = new Color[Block.TypeCount];
     Color flashColor = new Color(1.0f, 1.0f, 1.0f);
-
     float playOffsetY;
-
     const float gridElementLength = 1.0f;
     const float blockDyingFlashDuration = 0.2f;
     const float blockDyingSpeed = 1000;
 
-    // Use this for initialization
     void Start()
     {
         blockColors[0] = new Color(0.73f, 0.0f, 0.73f);
@@ -40,7 +36,6 @@ public class Displayer : MonoBehaviour
         playOffsetY = gridElementLength * Creep.CreepElapsed / Creep.CreepDuration;
     }
 
-    // Update is called once per frame
     void Update()
     {
         CalculatePlayOffsetY();
