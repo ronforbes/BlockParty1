@@ -15,22 +15,42 @@ public class Lobby : MonoBehaviour
     public GUIText Name;
     public GUIText Score;
     public GUIText Countdown;
+    public GUIText PersonalName;
+    public GUITexture PersonalPicture;
 
     void Start()
     {
-        if (FB.IsLoggedIn)
+        if (!Application.isEditor && FB.IsLoggedIn)
         {
-            FB.API("/me", Facebook.HttpMethod.GET, OnGetName);
+            FB.API("/me", Facebook.HttpMethod.GET, OnGetMe);
+        }
+        else
+        {
+            PersonalName.text = "Player Name";
         }
 
         networkingManager = GameObject.Find("Networking Manager").GetComponent<NetworkingManager>();
         networkingManager.MessageReceived += networkingManager_MessageReceived;
     }
 
-    void OnGetName(FBResult result)
+    void OnGetMe(FBResult result)
     {
         var dictionary = Json.Deserialize(result.Text) as Dictionary<string, object>;
-        name = dictionary["name"] as string;
+        PersonalName.text = dictionary["name"] as string;
+        string facebookId = dictionary["id"] as string;
+
+        StartCoroutine("GetProfilePicture", facebookId);
+    }
+
+    IEnumerator GetProfilePicture(string facebookId)
+    {
+        WWW www = new WWW("https" + "://graph.facebook.com/" + facebookId + "/picture");
+        Debug.Log("Loading profile picture");
+        yield return www;
+        Texture2D pictureTexture = new Texture2D(128, 128, TextureFormat.DXT1, false);
+        PersonalPicture.texture = pictureTexture;
+        www.LoadImageIntoTexture(pictureTexture);
+        Debug.Log("Loaded profile picture");
     }
 
     void networkingManager_MessageReceived(object sender, MessageReceivedEventArgs e)

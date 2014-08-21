@@ -7,7 +7,6 @@ using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using BlockPartyShared;
-using UnityEditor.VersionControl;
 
 public class NetworkingManager : MonoBehaviour
 {
@@ -33,11 +32,11 @@ public class NetworkingManager : MonoBehaviour
 
     public void Connect()
     {
-        #if DEBUG || UNITY_EDITOR
+        //#if DEBUG || UNITY_EDITOR
         client = new TcpClient("localhost", 1337);
-        #else
-        client = new TcpClient("54.183.32.220", 1337);
-        #endif
+        //#else
+        //client = new TcpClient("54.183.32.220", 1337);
+        //#endif
 
         if (client.Connected)
         {

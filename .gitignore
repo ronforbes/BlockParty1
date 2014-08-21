@@ -2,6 +2,8 @@
 Builds/
 Library/
 Temp/
+*.csproj
+*.sln
 
 # Azure
 packages/
